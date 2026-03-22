@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Energy Monitoring Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Energy Monitoring Dashboard</h1>
+    <p class="subtitle">Arduino MKR WiFi 1010 + MongoDB Atlas</p>
+
+    <div class="cards">
+      <div class="card">
+        <h2>Latest Current</h2>
+        <p id="latestCurrent">-- A</p>
+      </div>
+
+      <div class="card">
+        <h2>Latest Power</h2>
+        <p id="latestPower">-- W</p>
+      </div>
+
+      <div class="card">
+        <h2>Latest Cost</h2>
+        <p id="latestCost">--</p>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h2>Power Usage Over Time</h2>
+      <canvas id="powerChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h2>Current Over Time</h2>
+      <canvas id="currentChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h2>Estimated Cost Over Time</h2>
+      <canvas id="costChart"></canvas>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
