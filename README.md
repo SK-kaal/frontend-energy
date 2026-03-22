@@ -4,10 +4,12 @@ A real-time web dashboard for visualizing energy consumption data collected from
 
 ## Features
 
-- **Live summary cards** — Latest current (A), power (W), and estimated cost (£)
-- **Interactive charts** — Power usage, current, and cost over time
+- **Live summary cards** — Latest current (A), power (W), and cost per hour (£/hr)
+- **Custom cost rate** — Enter your £/kWh to calculate cost in real time (saved in browser)
+- **Single circuit view** — Shows total power draw from one Arduino sensor (no per-appliance breakdown)
+- **Interactive charts** — Power usage, current, and cumulative cost over time
 - **Auto-refresh** — Data updates every 5 seconds
-- **Responsive layout** — Works on desktop and mobile devices
+- **Demo mode** — Use fake data when the backend is unavailable (checkbox in header)
 
 ## Tech Stack
 
@@ -31,8 +33,9 @@ frontend/
 - The API should expose `GET /api/readings` returning a JSON array of objects with:
   - `current` — Current in amps (A)
   - `powerWatts` — Power in watts (W)
-  - `estimatedCost` — Estimated cost in pounds (£)
   - `timestamp` — ISO timestamp string
+  - `deviceId` — (optional) Device identifier, e.g. `mkr1010_01`
+  - `estimatedCost` — (optional) Backend cost; overridden by frontend when £/kWh is set
 
 ## Running the Dashboard
 
@@ -46,6 +49,15 @@ frontend/
    ```
 
 3. If using a local server, open `http://localhost:8000` (or the port you chose).
+
+## Demo Data (No Backend Required)
+
+You can run and test the dashboard **without a backend**:
+
+1. Check **"Use demo data"** in the header.
+2. The app will generate realistic mock readings for a single circuit (varying power over time).
+
+If the backend API is unreachable, the app **automatically falls back** to demo data and logs a warning in the console.
 
 ## Configuration
 

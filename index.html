@@ -6,42 +6,55 @@
   <title>Energy Monitoring Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
   <div class="container">
-    <h1>Energy Monitoring Dashboard</h1>
-    <p class="subtitle">Arduino MKR WiFi 1010 + MongoDB Atlas</p>
-
-    <div class="cards">
-      <div class="card">
-        <h2>Latest Current</h2>
-        <p id="latestCurrent">-- A</p>
+    <div class="header-row">
+      <div>
+        <h1>Energy Monitoring Dashboard</h1>
+        <p class="subtitle">Single circuit · Arduino MKR WiFi 1010 · MongoDB Atlas</p>
       </div>
-
-      <div class="card">
-        <h2>Latest Power</h2>
-        <p id="latestPower">-- W</p>
-      </div>
-
-      <div class="card">
-        <h2>Latest Cost</h2>
-        <p id="latestCost">--</p>
+      <div class="controls">
+        <label class="cost-input-label">
+          £/kWh:
+          <input type="number" id="rateInput" step="0.01" min="0" value="0.2635" />
+        </label>
+        <label class="demo-toggle">
+          <input type="checkbox" id="demoDataToggle" />
+          Use demo data
+        </label>
       </div>
     </div>
 
-    <div class="chart-card">
-      <h2>Power Usage Over Time</h2>
-      <canvas id="powerChart"></canvas>
-    </div>
+    <div class="page-content" data-page="all">
+      <div class="cards">
+        <div class="card">
+          <h2>Latest Current</h2>
+          <p id="latestCurrent">-- A</p>
+        </div>
+        <div class="card">
+          <h2>Latest Power</h2>
+          <p id="latestPower">-- W</p>
+        </div>
+        <div class="card">
+          <h2>Latest Cost</h2>
+          <p id="latestCost">--</p>
+        </div>
+      </div>
 
-    <div class="chart-card">
-      <h2>Current Over Time</h2>
-      <canvas id="currentChart"></canvas>
-    </div>
-
-    <div class="chart-card">
-      <h2>Estimated Cost Over Time</h2>
-      <canvas id="costChart"></canvas>
+      <div class="chart-card">
+        <h2>Power Usage Over Time</h2>
+        <canvas id="powerChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h2>Current Over Time</h2>
+        <canvas id="currentChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <h2>Estimated Cost Over Time</h2>
+        <canvas id="costChart"></canvas>
+      </div>
     </div>
   </div>
 
