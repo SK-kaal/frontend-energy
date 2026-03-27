@@ -4,71 +4,126 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Energy Monitoring Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
-  <nav class="top-nav" aria-label="Data source">
-    <a href="#arduino" class="nav-link" data-channel="arduino">Arduino (live)</a>
-    <a href="#kettle" class="nav-link" data-channel="kettle">Kettle</a>
-    <a href="#fridge" class="nav-link" data-channel="fridge">Fridge</a>
-    <a href="#tv" class="nav-link" data-channel="tv">TV</a>
-    <a href="#washing" class="nav-link" data-channel="washing">Washing machine</a>
-  </nav>
-
-  <div class="container">
-    <div class="header-row">
-      <div>
-        <h1>Energy Monitoring Dashboard</h1>
-        <p class="subtitle">Household view · live Arduino + simulated appliances</p>
-      </div>
-      <div class="controls">
-        <label class="cost-input-label">
-          £/kWh:
-          <input type="number" id="rateInput" step="0.01" min="0" value="0.2635" />
-        </label>
-      </div>
-    </div>
-
-    <p id="sourceBanner" class="source-banner" role="status"></p>
-
-    <div id="arduinoOnlyControls" class="arduino-controls" hidden>
-      <label class="demo-toggle">
-        <input type="checkbox" id="arduinoDemoToggle" />
-        Simulate Arduino (24h) when API is offline
-      </label>
-    </div>
-
-    <div class="page-content">
-      <div class="cards">
-        <div class="card">
-          <h2>Latest current</h2>
-          <p id="latestCurrent">-- A</p>
+  <div class="app">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <div class="brand__text">
+            <span class="brand__name">WattWatch</span>
+            <span class="brand__tag">Energy monitor</span>
+          </div>
         </div>
-        <div class="card">
-          <h2>Latest power</h2>
-          <p id="latestPower">-- W</p>
-        </div>
-        <div class="card">
-          <h2>Latest cost</h2>
-          <p id="latestCost">--</p>
-        </div>
+        <nav class="top-nav" aria-label="Data source">
+          <a href="#arduino" class="nav-link" data-channel="arduino"><span class="nav-link__dot nav-link__dot--live" aria-hidden="true"></span>Arduino</a>
+          <a href="#kettle" class="nav-link" data-channel="kettle">Kettle</a>
+          <a href="#fridge" class="nav-link" data-channel="fridge">Fridge</a>
+          <a href="#tv" class="nav-link" data-channel="tv">TV</a>
+          <a href="#washing" class="nav-link" data-channel="washing" title="Washing machine">Washing</a>
+        </nav>
       </div>
+    </header>
 
-      <div class="chart-card">
-        <h2>Power over time</h2>
-        <canvas id="powerChart"></canvas>
+    <main class="main">
+      <div class="container">
+        <section class="dashboard-heading" aria-labelledby="page-title">
+          <div class="dashboard-heading__intro">
+            <p class="eyebrow">Overview</p>
+            <h1 id="page-title" class="page-title">Dashboard</h1>
+            <p class="subtitle">Live circuit from your Arduino · month-long simulated profiles for household appliances</p>
+          </div>
+          <div class="rate-panel">
+            <label class="rate-panel__label" for="rateInput">Tariff</label>
+            <div class="rate-panel__field">
+              <span class="rate-panel__prefix" aria-hidden="true">£</span>
+              <input type="number" id="rateInput" class="rate-panel__input" step="0.001" min="0" value="0.2635" aria-describedby="rate-hint" />
+              <span class="rate-panel__suffix" id="rate-hint">per kWh</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="meta-panel" aria-label="Data context">
+          <p id="sourceBanner" class="source-banner" role="status"></p>
+          <div id="arduinoOnlyControls" class="arduino-controls" hidden>
+            <label class="toggle-row">
+              <input type="checkbox" id="arduinoDemoToggle" class="toggle-row__input" />
+              <span class="toggle-row__ui" aria-hidden="true"></span>
+              <span class="toggle-row__text">Use 24h simulated feed when API is offline</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="kpi-grid" aria-label="Latest readings">
+          <article class="kpi-card kpi-card--current">
+            <div class="kpi-card__icon" aria-hidden="true">⚡</div>
+            <div class="kpi-card__body">
+              <h2 class="kpi-card__label">Current</h2>
+              <p class="kpi-card__value" id="latestCurrent">-- A</p>
+            </div>
+          </article>
+          <article class="kpi-card kpi-card--power">
+            <div class="kpi-card__icon" aria-hidden="true">🔌</div>
+            <div class="kpi-card__body">
+              <h2 class="kpi-card__label">Power</h2>
+              <p class="kpi-card__value" id="latestPower">-- W</p>
+            </div>
+          </article>
+          <article class="kpi-card kpi-card--cost">
+            <div class="kpi-card__icon" aria-hidden="true">£</div>
+            <div class="kpi-card__body">
+              <h2 class="kpi-card__label">Est. hourly cost</h2>
+              <p class="kpi-card__value" id="latestCost">--</p>
+            </div>
+          </article>
+        </section>
+
+        <section class="charts-section" aria-label="Charts">
+          <div class="charts-grid charts-grid--pair">
+            <article class="chart-card">
+              <div class="chart-card__head">
+                <h2 class="chart-card__title">Power over time</h2>
+                <p class="chart-card__hint">Load in watts</p>
+              </div>
+              <div class="chart-canvas-wrap">
+                <canvas id="powerChart"></canvas>
+              </div>
+            </article>
+            <article class="chart-card">
+              <div class="chart-card__head">
+                <h2 class="chart-card__title">Current over time</h2>
+                <p class="chart-card__hint">Amperage draw</p>
+              </div>
+              <div class="chart-canvas-wrap">
+                <canvas id="currentChart"></canvas>
+              </div>
+            </article>
+          </div>
+          <article class="chart-card chart-card--wide">
+            <div class="chart-card__head">
+              <h2 class="chart-card__title">Cost over time</h2>
+              <p class="chart-card__hint">Cumulative or estimated from tariff</p>
+            </div>
+            <div class="chart-canvas-wrap chart-canvas-wrap--tall">
+              <canvas id="costChart"></canvas>
+            </div>
+          </article>
+        </section>
       </div>
-      <div class="chart-card">
-        <h2>Current over time</h2>
-        <canvas id="currentChart"></canvas>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <span>MKR WiFi 1010 · MongoDB · Chart.js</span>
       </div>
-      <div class="chart-card">
-        <h2>Cost over time</h2>
-        <canvas id="costChart"></canvas>
-      </div>
-    </div>
+    </footer>
   </div>
 
   <script src="app.js"></script>

@@ -302,11 +302,24 @@ function updateCharts(data) {
   }
 }
 
+const CHART_THEME = {
+  powerChart: { borderColor: "#0d9488", backgroundColor: "rgba(13, 148, 136, 0.12)" },
+  currentChart: { borderColor: "#6366f1", backgroundColor: "rgba(99, 102, 241, 0.12)" },
+  costChart: { borderColor: "#d97706", backgroundColor: "rgba(217, 119, 6, 0.12)" },
+};
+
+const CHART_SCALE_COLORS = {
+  grid: "rgba(15, 23, 42, 0.06)",
+  ticks: "#64748b",
+};
+
 function createChart(canvasId, label, timestamps, values, win) {
   const el = document.getElementById(canvasId);
   if (!el) return null;
   const ctx = el.getContext("2d");
   const chartData = timestamps.map((t, i) => ({ x: t, y: values[i] }));
+  const theme = CHART_THEME[canvasId] || CHART_THEME.powerChart;
+
   return new Chart(ctx, {
     type: "line",
     data: {
@@ -314,17 +327,31 @@ function createChart(canvasId, label, timestamps, values, win) {
         {
           label,
           data: chartData,
+          borderColor: theme.borderColor,
+          backgroundColor: theme.backgroundColor,
           borderWidth: 2,
-          tension: 0.15,
+          fill: true,
+          tension: 0.2,
           pointRadius: 0,
-          pointHitRadius: 6,
+          pointHoverRadius: 4,
+          pointHitRadius: 8,
         },
       ],
     },
     options: {
       responsive: true,
-      maintainAspectRatio: true,
+      maintainAspectRatio: false,
       interaction: { mode: "index", intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: "rgba(15, 23, 42, 0.92)",
+          titleFont: { size: 12, weight: "600" },
+          bodyFont: { size: 12 },
+          padding: 12,
+          cornerRadius: 8,
+        },
+      },
       scales: {
         x: {
           type: "time",
@@ -334,9 +361,23 @@ function createChart(canvasId, label, timestamps, values, win) {
             unit: win.timeUnit,
             displayFormats: { hour: "HH:mm", day: "d MMM" },
           },
-          ticks: { maxTicksLimit: win.maxTicks },
+          ticks: {
+            maxTicksLimit: win.maxTicks,
+            color: CHART_SCALE_COLORS.ticks,
+            font: { size: 11 },
+          },
+          grid: { color: CHART_SCALE_COLORS.grid, drawTicks: true },
+          border: { display: false },
         },
-        y: { beginAtZero: true },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            color: CHART_SCALE_COLORS.ticks,
+            font: { size: 11 },
+          },
+          grid: { color: CHART_SCALE_COLORS.grid },
+          border: { display: false },
+        },
       },
     },
   });
