@@ -5,6 +5,47 @@ body {
   color: #222;
 }
 
+.top-nav {
+  background: #1a365d;
+  padding: 12px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nav-link {
+  color: #e2e8f0;
+  text-decoration: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.nav-link.active {
+  background: #3182ce;
+  color: #fff;
+}
+
+.source-banner {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  background: #edf2f7;
+  border-radius: 8px;
+  border-left: 4px solid #3182ce;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #2d3748;
+}
+
+.arduino-controls {
+  margin-bottom: 16px;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;

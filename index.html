@@ -9,50 +9,63 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 </head>
 <body>
+  <nav class="top-nav" aria-label="Data source">
+    <a href="#arduino" class="nav-link" data-channel="arduino">Arduino (live)</a>
+    <a href="#kettle" class="nav-link" data-channel="kettle">Kettle</a>
+    <a href="#fridge" class="nav-link" data-channel="fridge">Fridge</a>
+    <a href="#tv" class="nav-link" data-channel="tv">TV</a>
+    <a href="#washing" class="nav-link" data-channel="washing">Washing machine</a>
+  </nav>
+
   <div class="container">
     <div class="header-row">
       <div>
         <h1>Energy Monitoring Dashboard</h1>
-        <p class="subtitle">Single circuit · Arduino MKR WiFi 1010 · MongoDB Atlas</p>
+        <p class="subtitle">Household view · live Arduino + simulated appliances</p>
       </div>
       <div class="controls">
         <label class="cost-input-label">
           £/kWh:
           <input type="number" id="rateInput" step="0.01" min="0" value="0.2635" />
         </label>
-        <label class="demo-toggle">
-          <input type="checkbox" id="demoDataToggle" />
-          Use demo data
-        </label>
       </div>
     </div>
 
-    <div class="page-content" data-page="all">
+    <p id="sourceBanner" class="source-banner" role="status"></p>
+
+    <div id="arduinoOnlyControls" class="arduino-controls" hidden>
+      <label class="demo-toggle">
+        <input type="checkbox" id="arduinoDemoToggle" />
+        Simulate Arduino (24h) when API is offline
+      </label>
+    </div>
+
+    <div class="page-content">
       <div class="cards">
         <div class="card">
-          <h2>Latest Current</h2>
+          <h2>Latest current</h2>
           <p id="latestCurrent">-- A</p>
         </div>
         <div class="card">
-          <h2>Latest Power</h2>
+          <h2>Latest power</h2>
           <p id="latestPower">-- W</p>
         </div>
         <div class="card">
-          <h2>Latest Cost</h2>
+          <h2>Latest cost</h2>
           <p id="latestCost">--</p>
         </div>
       </div>
 
       <div class="chart-card">
-        <h2>Power Usage Over Time</h2>
+        <h2>Power over time</h2>
         <canvas id="powerChart"></canvas>
       </div>
       <div class="chart-card">
-        <h2>Current Over Time</h2>
+        <h2>Current over time</h2>
         <canvas id="currentChart"></canvas>
       </div>
       <div class="chart-card">
-        <h2>Estimated Cost Over Time</h2>
+        <h2>Cost over time</h2>
         <canvas id="costChart"></canvas>
       </div>
     </div>

@@ -1,67 +1,46 @@
 # Energy Monitoring Dashboard
 
-A real-time web dashboard for visualizing energy consumption data collected from an **Arduino MKR WiFi 1010** and stored in **MongoDB Atlas**.
+A web dashboard for energy readings from an **Arduino MKR WiFi 1010** (via **MongoDB Atlas** backend) and **simulated** household appliances for comparison and demos.
 
 ## Features
 
-- **Live summary cards** — Latest current (A), power (W), and cost per hour (£/hr)
-- **Custom cost rate** — Enter your £/kWh to calculate cost in real time (saved in browser)
-- **Single circuit view** — Shows total power draw from one Arduino sensor (no per-appliance breakdown)
-- **Interactive charts** — Power usage, current, and cumulative cost over time
-- **Auto-refresh** — Data updates every 5 seconds
-- **Demo mode** — Use fake data when the backend is unavailable (checkbox in header)
+- **Arduino (live)** — Reads `GET /api/readings`; shows the last **24 hours** of data from your physical sensor. Optional checkbox: **simulate Arduino (24h)** when the API is offline (does not auto-replace real data unless you opt in).
+- **Simulated appliances** — **Kettle**, **Fridge**, **TV**, **Washing machine**: each has **31 days** of **hourly** synthetic power data (deterministic, precomputed in the browser). These are **not** from your Arduino.
+- **Summary cards** — Latest current (A), power (W), and cost per hour (£/hr) for the selected source.
+- **£/kWh** — Default UK average (~£0.2635); your value is saved in the browser.
+- **Charts** — Power, current, and cumulative cost over time. Arduino view uses an hourly time axis for one day; simulated views span the full month on a day-based axis.
 
 ## Tech Stack
 
 - Vanilla HTML, CSS, and JavaScript
-- [Chart.js](https://www.chartjs.org/) for data visualization
-- Fetches data from a local backend API
+- [Chart.js](https://www.chartjs.org/) + [chartjs-adapter-date-fns](https://github.com/chartjs/chartjs-adapter-date-fns) for time scales
 
 ## Project Structure
 
 ```
 frontend/
-├── index.html   # Dashboard layout and structure
-├── style.css    # Styling and responsive design
-├── app.js       # API integration and chart logic
-└── README.md    # This file
+├── index.html
+├── style.css
+├── app.js
+├── README.md
+└── energy-monitor-single-vs-multiple-appliances.txt
 ```
 
 ## Prerequisites
 
-- A backend API running at `http://localhost:5000` that serves energy readings
-- The API should expose `GET /api/readings` returning a JSON array of objects with:
-  - `current` — Current in amps (A)
-  - `powerWatts` — Power in watts (W)
-  - `timestamp` — ISO timestamp string
-  - `deviceId` — (optional) Device identifier, e.g. `mkr1010_01`
-  - `estimatedCost` — (optional) Backend cost; overridden by frontend when £/kWh is set
+- Backend at `http://localhost:5000` with `GET /api/readings` returning objects with at least `current`, `powerWatts`, `timestamp`.
 
-## Running the Dashboard
+## Running
 
-1. Ensure your backend API is running on port 5000.
-2. Open `index.html` in a web browser, or serve the folder with a local server:
+```bash
+npx serve .
+```
 
-   ```bash
-   npx serve .
-   # or
-   python -m http.server 8000
-   ```
-
-3. If using a local server, open `http://localhost:8000` (or the port you chose).
-
-## Demo Data (No Backend Required)
-
-You can run and test the dashboard **without a backend**:
-
-1. Check **"Use demo data"** in the header.
-2. The app will generate realistic mock readings for a single circuit (varying power over time).
-
-If the backend API is unreachable, the app **automatically falls back** to demo data and logs a warning in the console.
+Open the URL shown (e.g. `http://localhost:3000`). Use the top nav to switch between **Arduino (live)** and each simulated appliance.
 
 ## Configuration
 
-To change the API endpoint, edit `API_URL` in `app.js`:
+Change the API URL in `app.js`:
 
 ```javascript
 const API_URL = "http://localhost:5000/api/readings";
