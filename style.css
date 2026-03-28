@@ -78,36 +78,11 @@ body {
 }
 
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.brand__mark {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--accent) 0%, #14b8a6 100%);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
-}
-
-.brand__text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.brand__name {
+  margin: 0;
   font-weight: 700;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   letter-spacing: -0.02em;
-}
-
-.brand__tag {
-  font-size: 0.75rem;
-  color: var(--text-on-dark-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  color: var(--text-on-dark);
 }
 
 .top-nav {
